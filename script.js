@@ -34,20 +34,63 @@ function playRpsRound(playerSelection, computerSelection) {
         doesPlayerWin = 2;
     }
 
-
-    // if dPW = 0, return "You Lose! {computerSelection} beats {playerSelection}"
-    // else if dPW = 1, return "You Win! {playerSelection} beats {computerSelection}"
-    // else return "It's a tie! Both made the same choice"
-    if (doesPlayerWin == 0) {
-        return `You Lose! ${computerSelection} beats ${playerSelection}`;
-    } else if (doesPlayerWin == 1) {
-        return `You Win! ${playerSelection} beats ${computerSelection}`;
-    } else {
-        return `It is a Tie! Both chose ${playerSelection}`;
-    }
+    return doesPlayerWin;
 }
 
-const playerSelection = 'Scissors';
-const computerSelection = computerPlay();
-console.log("Computer Chose: " + computerSelection);
-console.log(playRpsRound(playerSelection, computerSelection))
+
+function getUserInput() {
+    let userInputInvalid = true;
+    let userInput;
+    while(userInputInvalid) {
+        userInput = prompt("Your choice?").toUpperCase();
+        if (userInput === 'ROCK' || userInput === 'SCISSORS' || userInput === 'PAPER') {
+            userInputInvalid = false;
+        }
+    }
+    return userInput;
+}
+
+// game() : play a 5 round game of rps
+function game() {
+    // create roundsWonPlayer and roundWonComputer = 0
+    let roundsWonPlayer = 0;
+    let roundWonComputer = 0;
+    const numberOfRounds = 5;
+    // for i -> 0 to 4
+
+    for (let i = 0; i < numberOfRounds; i++) {
+
+        // get playerinput using prompt
+        const playerInput = getUserInput();
+
+        // get computerinput by calling computerPlay
+        const computerInput = computerPlay();
+
+        // play one round
+        const roundResult = playRpsRound(playerInput, computerInput);
+
+        // if it returns 0 : increment rWC
+        if (roundResult === 0) {
+            console.log(`You lose this round. ${computerInput} beats ${playerInput}`);
+            roundWonComputer++;
+        } else if (roundResult === 1) { // else if it returns 1 : increment rWP
+            console.log(`You win this round. ${playerInput} beats ${computerInput}`);
+            roundsWonPlayer++;
+        }
+        else {
+            console.log(`It is tie. Both chose ${playerInput}`);
+        }
+    }   
+    
+    // if rWP > rWC, then print You Won!
+    if (roundsWonPlayer > roundWonComputer) {
+        return 'You Win';
+    } else if (roundsWonPlayer < roundWonComputer) { // else if rWP < rWC, then print You Lose!
+        return 'You Lose'
+    } else { // else print It is a tie!
+        return 'It is a tie';
+    }
+    
+}
+
+console.log(game());
